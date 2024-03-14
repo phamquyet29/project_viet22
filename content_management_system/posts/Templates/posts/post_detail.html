@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Post Detail</title>
+  </head>
+  <body>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    {% if post.image %}
+    <img src="{{ post.image.url }}" alt="Post Image" />
+    {% endif %}
+    <p>Created at: {{ post.created_at }}</p>
+    <p>Last updated: {{ post.updated_at }}</p>
+    <a href="{% url 'post_edit' pk=post.pk %}">Edit</a>
+    <form action="{% url 'post_delete' pk=post.pk %}" method="post">
+      {% csrf_token %}
+      <input type="submit" value="Delete" />
+    </form>
+    <a href="{% url 'post_list' %}">Back to Post List</a>
+  </body>
+</html>
