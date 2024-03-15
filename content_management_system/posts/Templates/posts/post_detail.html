@@ -117,6 +117,39 @@
         <p>Nội dung : {{ post.content }}</p>
         <p>Created at: {{ post.created_at }}</p>
         <p>Last updated: {{ post.updated_at }}</p>
+        {% if user.is_authenticated %}
+        <form
+          class=""
+          method="post"
+          action="{% url 'add_comment_to_post' post.pk %}"
+        >
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="id_content" class="form-label">Content</label>
+            <input
+              type="text"
+              class="form-control"
+              id="id_content"
+              name="content"
+            />
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        {% endif %}
+        <div class="comments mt-5 border-top">
+          <h2>Comments</h2>
+          {% for comment in post.comments.all %}
+          <div class="comment border-top">
+            <p>
+              <strong>{{ comment.author.username }}</strong>:
+              {{comment.content}}
+            </p>
+            <p>{{ comment.created_date|date:"d/m/Y, H:i" }}</p>
+          </div>
+          {% empty %}
+          <p>No comments yet.</p>
+          {% endfor %}
+        </div>
       </div>
       {% if request.user.is_authenticated %}
       <a class="btn btn-success mb-2" href="{% url 'post_edit' pk=post.pk %}"
@@ -135,6 +168,136 @@
         >Back to Post List</a
       >
     </div>
+    <footer
+      class="text-center text-lg-start text-white"
+      style="background-color: #1c2331"
+    >
+      <!-- Section: Social media -->
+      <section class="d-flex justify-content-between p-4 bg-warning">
+        <!-- Left -->
+        <div class="me-5">
+          <span class="text-black"
+            >Get connected with us on social networks:</span
+          >
+        </div>
+        <!-- Left -->
+
+        <!-- Right -->
+        <div>
+          <a href="" class="text-white me-4">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="" class="text-white me-4">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="" class="text-white me-4">
+            <i class="fab fa-google"></i>
+          </a>
+          <a href="" class="text-white me-4">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="" class="text-white me-4">
+            <i class="fab fa-linkedin"></i>
+          </a>
+          <a href="" class="text-white me-4">
+            <i class="fab fa-github"></i>
+          </a>
+        </div>
+        <!-- Right -->
+      </section>
+      <!-- Section: Social media -->
+
+      <!-- Section: Links  -->
+      <section class="">
+        <div class="container text-center text-md-start mt-5">
+          <!-- Grid row -->
+          <div class="row mt-3">
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+              <!-- Content -->
+              <h6 class="text-uppercase fw-bold">BaoViet.24H</h6>
+              <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 60px; background-color: #7c4dff; height: 2px"
+              />
+              <p>
+                Cơ quan chủ quản: Bộ Thông tin và Truyền thông Số giấy phép:
+                09/GP - BTTTT, cấp ngày 07/01/2019
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold">Báo</h6>
+              <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 60px; background-color: #7c4dff; height: 2px"
+              />
+              <p>
+                <a href="#!" class="text-white">Đá bóng</a>
+              </p>
+              <p>
+                <a href="#!" class="text-white">Cầu lông</a>
+              </p>
+              <p>
+                <a href="#!" class="text-white">Bóng chuyền</a>
+              </p>
+              <p>
+                <a href="#!" class="text-white">Điền kinh</a>
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold">Useful links</h6>
+              <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 60px; background-color: #7c4dff; height: 2px"
+              />
+              <p>
+                <a href="#!" class="text-white">Your Account</a>
+              </p>
+              <p>
+                <a href="#!" class="text-white">Become an Affiliate</a>
+              </p>
+
+              <p>
+                <a href="#!" class="text-white">Help</a>
+              </p>
+            </div>
+            <!-- Grid column -->
+
+            <!-- Grid column -->
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+              <!-- Links -->
+              <h6 class="text-uppercase fw-bold">Contact</h6>
+              <hr
+                class="mb-4 mt-0 d-inline-block mx-auto"
+                style="width: 60px; background-color: #7c4dff; height: 2px"
+              />
+              <p><i class="fas fa-home mr-3"></i> Việt Nam</p>
+              <p><i class="fas fa-envelope mr-3"></i> baoviet24h@gmail.com</p>
+              <p><i class="fas fa-phone mr-3"></i> + 84 234 567 88</p>
+              <p><i class="fas fa-print mr-3"></i> + 84 234 567 89</p>
+            </div>
+            <!-- Grid column -->
+          </div>
+          <!-- Grid row -->
+        </div>
+      </section>
+      <!-- Section: Links  -->
+
+      <!-- Copyright -->
+      <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+        © 2024 Copyright:
+        <a class="text-white" href="#">BaoViet.24H</a>
+      </div>
+      <!-- Copyright -->
+    </footer>
     <script>
       document
         .getElementById("delete-form")

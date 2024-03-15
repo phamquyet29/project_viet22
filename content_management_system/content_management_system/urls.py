@@ -17,7 +17,7 @@ urlpatterns = [
     path('register/', post_views.register_view, name='register'),
     # path('search/', post_views.search, name='search'),
 
-    
+    path('post/<int:post_id>/comment/', post_views.add_comment_to_post, name='add_comment_to_post'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
