@@ -12,8 +12,9 @@ def post_detail(request, pk):
 
 def post_create(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = PostForm(request.POST,request.FILES)
         if form.is_valid():
+            print(request.FILES)
             form.save()
             return redirect('post_list')
     else:
@@ -23,13 +24,14 @@ def post_create(request):
 def post_edit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
+        form = PostForm(request.POST, request.FILES, instance=post)  # Truyền cả request.FILES vào form
         if form.is_valid():
             form.save()
             return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
     return render(request, 'posts/post_form.html', {'form': form})
+
 
 def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk)
