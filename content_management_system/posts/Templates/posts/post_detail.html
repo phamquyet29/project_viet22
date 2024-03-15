@@ -22,7 +22,7 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="/">
         <h2 class="ps-4">BaoViet.24H</h2>
       </a>
 
@@ -37,78 +37,116 @@
           <li class="nav-item pe-5">
             <a class="nav-link" href="/post">Bài viết</a>
           </li>
+          <li class="nav-item pe-5">
+            <a class="nav-link" href="/post">Sức khoẻ</a>
+          </li>
 
+          <li class="nav-item dropdown pe-5">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Thể thao
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="#">Đá bóng</a></li>
+              <li><a class="dropdown-item" href="#">Điền kinh</a></li>
+              <li><a class="dropdown-item" href="#">Cầu lông</a></li>
+              <li><a class="dropdown-item" href="#">Bóng chuyền</a></li>
+            </ul>
+          </li>
+          {% if request.user.is_superuser %}
           <li class="nav-item">
             <a class="nav-link" href="/admin">Admin</a>
           </li>
+          {% endif %}
         </ul>
 
         <form class="form-inline my-2 my-lg-0 d-flex ms-5" method="POST">
+          {% csrf_token %}
           <input
-            class="form-control mr-sm-2"
+            class="form-control mr-sm-2 me-2"
             type="text"
-            placeholder="Search"
-            name="keyword"
+            placeholder="Search..."
+            name="q"
           />
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+          <button class="btn btn-success my-2 my-sm-0" type="submit">
             Search
           </button>
         </form>
-        <!-- Navbar code ... -->
 
         <div>
-          <!-- Hiển thị khi chưa đăng nhập -->
-          <a class="btn btn-danger" href="/login">Signin</a>
-          <a class="btn btn-secondary" href="/register">Signup</a>
-
-          <!-- Hiển thị khi đã đăng nhập -->
+          {% if user.is_authenticated %}
           <div class="d-flex">
-            <a class="navbar-text pe-3 text-decoration-none" href="">
-              <p class="navbar-text pe-3 pt-3">Welcome,</p>
+            <a class="navbar-text pe-3 text-decoration-none" href="#">
+              <p class="navbar-text pe-3 pt-3">Welcome, {{ user.username }}</p>
             </a>
-
             <div>
-              <form method="POST" action="/logout" class="d-flex" role="search">
+              <form
+                method="POST"
+                action="{% url 'logout' %}"
+                class="d-flex"
+                role="search"
+              >
+                {% csrf_token %}
                 <button class="btn btn-danger mt-3" type="submit">
                   Logout
                 </button>
               </form>
             </div>
           </div>
+          {% else %}
+          <a class="btn btn-danger" href="/login">Signin</a>
+          <a class="btn btn-secondary" href="/register">Signup</a>
+          {% endif %}
         </div>
-
-        <!-- Rest of the Navbar code ... -->
       </div>
     </nav>
-    <div class="d-flex flex-column justify-content-evenly">
-      <div class="d-flex flex-column justify-content-center">
+    <div
+      class="container d-flex flex-column justify-content-center align-items-center"
+    >
+      <div class="d-flex flex-column justify-content-center align-items-center">
         <h1 class="">Tiêu đề : {{ post.title }}</h1>
-        <p>Nội dung : {{ post.content }}</p>
+
         {% if post.image %}
         <img class="w-50" src="{{ post.image.url }}" alt="Post Image" />
         {% endif %}
+        <p>Nội dung : {{ post.content }}</p>
         <p>Created at: {{ post.created_at }}</p>
         <p>Last updated: {{ post.updated_at }}</p>
       </div>
-      <div class="d-flex flex-column justify-content-evenly">
-        <a
-          class="btn btn-success mb-2 w-25"
-          href="{% url 'post_edit' pk=post.pk %}"
-          >Edit</a
-        >
-        <form action="{% url 'post_delete' pk=post.pk %}" method="post">
-          {% csrf_token %}
-          <input
-            class="btn btn-success mb-2 w-25"
-            type="submit"
-            value="Delete"
-          />
-        </form>
-        <a class="btn btn-success mb-2 w-25" href="{% url 'post_list' %}"
-          >Back to Post List</a
-        >
-      </div>
+      {% if request.user.is_authenticated %}
+      <a class="btn btn-success mb-2" href="{% url 'post_edit' pk=post.pk %}"
+        >Edit</a
+      >
+      <form
+        id="delete-form"
+        action="{% url 'post_delete' pk=post.pk %}"
+        method="post"
+      >
+        {% csrf_token %}
+        <input class="btn btn-danger mb-2" type="submit" value="Delete" />
+        {% endif %}
+      </form>
+      <a class="btn btn-primary mb-2" href="{% url 'post_list' %}"
+        >Back to Post List</a
+      >
     </div>
+    <script>
+      document
+        .getElementById("delete-form")
+        .addEventListener("submit", function (event) {
+          var confirmation = confirm(
+            "Bạn có chắc muốn xoá bài viết này không?"
+          );
+          if (!confirmation) {
+            event.preventDefault(); // Ngăn chặn việc gửi yêu cầu xoá nếu người dùng không xác nhận
+          }
+        });
+    </script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"

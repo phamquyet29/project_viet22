@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post
 from .forms import PostForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+
 
 def post_list(request):
     posts = Post.objects.all()
@@ -37,3 +40,36 @@ def post_delete(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
     return redirect('post_list')
+
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('post_list')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'posts/login.html', {'form': form})
+
+def logout_view(request):
+    logout(request)
+    return redirect('post_list')
+
+def register_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'posts/register.html', {'form': form})
+
+# def search(request):
+#     query = request.GET.get('q')
+#     results = None
+#     if query:
+#         results = Post.objects.filter(your_field__icontains=query)
+#     return render(request, 'posts/search.html', {'results': results})

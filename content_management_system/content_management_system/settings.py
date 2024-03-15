@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-5ru36cxiqh_oov$gtu(2%nlrglmapljp%*r9)--syvxfz615!u
 DEBUG = True
 
 ALLOWED_HOSTS = []
+LOGIN_REDIRECT_URL = 'home'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
