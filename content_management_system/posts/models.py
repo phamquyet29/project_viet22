@@ -2,8 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 class Post(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=2000)
     content = models.TextField()
+    content2 = models.TextField(default='')
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

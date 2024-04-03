@@ -108,13 +108,17 @@
     <div
       class="container d-flex flex-column justify-content-center align-items-center"
     >
-      <div class="d-flex flex-column justify-content-center align-items-center">
-        <h1 class="">Tiêu đề : {{ post.title }}</h1>
+      <div class="">
+        <h1 class="">{{ post.title }}</h1>
 
         {% if post.image %}
-        <img class="w-50" src="{{ post.image.url }}" alt="Post Image" />
+        <img
+          class="w-50 d-flex flex-column justify-content-center align-items-center"
+          src="{{ post.image.url }}"
+          alt="Post Image"
+        />
         {% endif %}
-        <p>Nội dung : {{ post.content }}</p>
+        <p class="text-break">Nội dung : {{ post.content }}</p>
         <p>Created at: {{ post.created_at }}</p>
         <p>Last updated: {{ post.updated_at }}</p>
         {% if user.is_authenticated %}
@@ -125,19 +129,19 @@
         >
           {% csrf_token %}
           <div class="mb-3">
-            <label for="id_content" class="form-label">Content</label>
+            <label for="id_content" class="form-label">Bình luận</label>
             <input
               type="text"
-              class="form-control"
+              class="form-control w-25"
               id="id_content"
               name="content"
             />
           </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Gửi</button>
         </form>
         {% endif %}
         <div class="comments mt-5 border-top">
-          <h2>Comments</h2>
+          <h2>Bình luận</h2>
           {% for comment in post.comments.all %}
           <div class="comment border-top">
             <p>
@@ -151,10 +155,17 @@
           {% endfor %}
         </div>
       </div>
-      {% if request.user.is_authenticated %}
+      <!-- {% if request.user.is_authenticated %}
       <a class="btn btn-success mb-2" href="{% url 'post_edit' pk=post.pk %}"
         >Edit</a
       >
+      <div class="d-flex justify-content-center">
+        {% if request.user.is_authenticated %}
+        <a class="btn btn-primary mb-5" href="{% url 'post_create' %}"
+          >Create New Post</a
+        >
+        {% endif %}
+      </div>
       <form
         id="delete-form"
         action="{% url 'post_delete' pk=post.pk %}"
@@ -162,9 +173,9 @@
       >
         {% csrf_token %}
         <input class="btn btn-danger mb-2" type="submit" value="Delete" />
-        {% endif %}
+        {% endif %} -->
       </form>
-      <a class="btn btn-primary mb-2" href="{% url 'post_list' %}"
+      <a class="btn btn-warning mb-2" href="{% url 'post_list' %}"
         >Back to Post List</a
       >
     </div>
