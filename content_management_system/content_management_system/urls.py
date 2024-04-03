@@ -15,7 +15,8 @@ urlpatterns = [
      path('logout/', post_views.logout_view, name='logout'),
     path('login/', post_views.login_view, name='login'),
     path('register/', post_views.register_view, name='register'),
-    # path('search/', post_views.search, name='search'),
+    path('search/', post_views.search_view, name='search_view'),
+
 
     path('post/<int:post_id>/comment/', post_views.add_comment_to_post, name='add_comment_to_post'),
 ]

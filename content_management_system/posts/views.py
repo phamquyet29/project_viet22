@@ -89,3 +89,10 @@ def add_comment_to_post(request, post_id):
     else:
         form = CommentForm()
     return render(request, 'post_detail.html', {'post': post, 'comment_form': form})
+
+def search_view(request):
+    query = request.GET.get('q')
+    posts = Post.objects.all()
+    if query:
+        posts = posts.filter(title__icontains=query)
+    return render(request, 'posts/post_list.html', {'posts': posts})

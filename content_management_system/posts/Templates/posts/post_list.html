@@ -65,7 +65,11 @@
           {% endif %}
         </ul>
 
-        <form class="form-inline my-2 my-lg-0 d-flex ms-5" method="POST">
+        <form
+          class="form-inline my-2 my-lg-0 d-flex ms-5"
+          method="GET"
+          action="{% url 'search_view' %}"
+        >
           {% csrf_token %}
           <input
             class="form-control mr-sm-2 me-2"
